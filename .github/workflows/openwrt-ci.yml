@@ -35,7 +35,7 @@ jobs:
 
     name: Build OpenWrt firmware
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     if: github.event.repository.owner.id == github.event.sender.id
 
@@ -64,6 +64,9 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
       
+      - name: Ensure GNU install
+        run: sudo apt-get update -yy >/dev/null 2>&1; sudo apt-get install -y coreutils || true
+
       - name: Free up disk space
         run: |
           echo "Disk space before cleanup:"
@@ -139,7 +142,7 @@ jobs:
           # 取消bootstrap为默认主题：
           sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/themes/luci-theme-bootstrap/root/etc/uci-defaults/30_luci-theme-bootstrap
           # 修改bootstrap主题为argon主题：
-          sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' ./feeds/luci/collections/luci/Makefile
+          sed -i 's/luci-theme-bootstrap/luci-theme-design/g' ./feeds/luci/collections/luci/Makefile
 
           make defconfig
 
